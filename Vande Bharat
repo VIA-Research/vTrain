@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Train Simulator (Browser)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0a0f1d;
+      color: #fff;
+      text-align: center;
+      padding: 40px;
+    }
+    #train-status {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    button {
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 18px;
+      background-color: #1f8ef1;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0c6de2;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚆 Vande Bharat Train Simulator</h1>
+
+  <div id="train-status">
+    Speed: 0 km/h<br>
+    Doors: Closed<br>
+    Roam: Off
+  </div>
+
+  <div>
+    <button onclick="accelerate()">Accelerate (W)</button>
+    <button onclick="brake()">Brake (S)</button>
+    <button onclick="toggleDoors()">Toggle Doors (Space)</button>
+    <button onclick="toggleRoam()">Toggle Roam (R)</button>
+    <button onclick="playHorn()">Horn (H)</button>
+  </div>
+
+  <audio id="horn-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2eae3a6b71.mp3" preload="auto"></audio>
+
+  <script>
+    let speed = 0;
+    const maxSpeed = 180;
+    const acceleration = 20;
+    const deceleration = 30;
+    let doorsOpen = false;
+    let canRoam = false;
+
+    function updateStatus() {
+      document.getElementById("train-status").innerHTML =
+        `Speed: ${Math.round(speed)} km/h<br>` +
+        `Doors: ${doorsOpen ? "Open" : "Closed"}<br>` +
+        `Roam: ${canRoam ? "On" : "Off"}`;
+    }
+
+    function accelerate() {
+      speed = Math.min(speed + acceleration, maxSpeed);
+      updateStatus();
+    }
+
+    function brake() {
+      speed = Math.max(speed - deceleration, 0);
+      updateStatus();
+    }
+
+    function toggleDoors() {
+      if (speed === 0 || canRoam) {
+        doorsOpen = !doorsOpen;
+        updateStatus();
+      } else {
+        alert("You must stop the train to open doors.");
+      }
+    }
+
+    function toggleRoam() {
+      canRoam = !canRoam;
+      updateStatus();
+    }
+
+    function playHorn() {
+      document.getElementById("horn-audio").play();
+    }
+
+    updateStatus();
+  </script>
+
+</body>
+</html>
